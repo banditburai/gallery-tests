@@ -1,527 +1,1639 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Gallery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap" rel="stylesheet">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="v6 Rating Round 2" />
+    <title>v6 Rating Round 2</title>
+    <meta
+      property="og:image"
+      content="https://cdn.midjourney.com/60d53abd-12a3-4abe-9cd3-4d7de4df927a/grid_0_384_N.webp"
+    />
+    <meta property="og:description" content="v6 Rating Round 2" />
+    <title>v6 Rating Round 2</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Special+Elite&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body {
-  background-color: #001f3f; /* Deep navy color */
-  font-family: 'Special Elite', cursive;
-  color: white;
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
+      html,
+      body {
+        max-height: 100vh;
+        overflow-y: hidden;
+        margin: 0;
+        padding: 0;
+      }
 
-.image-item.tilt-left {
-  transform: perspective(500px) rotateY(15deg);
-  transition: transform 0.5s ease;
-}
+      .gallery-container {
+        max-height: 100vh;
+        overflow: hidden;
+      }
+      body {
+        background-color: #001f3f;
+        font-family: "Special Elite", cursive;
+        color: white;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
 
-.image-item.tilt-right {
-  transform: perspective(500px) rotateY(-15deg);
-  transition: transform 0.5s ease;
-}
+      .image-item.tilt-left {
+        transform: perspective(500px) rotateY(15deg);
+        transition: transform 0.5s ease;
+      }
 
+      .image-item.tilt-right {
+        transform: perspective(500px) rotateY(-15deg);
+        transition: transform 0.5s ease;
+      }
 
-.gallery-container {
-  text-align: center;
-  padding: 60px 0;
-}
+      .gallery-container {
+        text-align: center;
+        padding: 60px 0;
+      }
 
-.gallery-title {
-  font-size: 2.5rem; /* Responsive font size */
-  margin-bottom: 1rem;
-}
+      .img {
+        box-shadow: 0px 0px 0px 1px rgba(0, 0, 0, 0.06),
+          0px 1px 1px rgba(0, 0, 0, 0.06), 0px 3px 3px rgba(0, 0, 0, 0.06),
+          0px 6px 6px rgba(0, 0, 0, 0.06), 0px 12px 12px rgba(0, 0, 0, 0.06),
+          0px 24px 24px rgba(0, 0, 0, 0.06);
+      }
+      .gallery-title {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+      }
 
-.scroll-line {
-  background: white; /* Inactive color */
-  height: 20px;
-  width: 2px;
-  margin: 0 4px;
-}
+      .scroll-line {
+        background: white;
+        height: 20px;
+        width: 2px;
+        margin: 0 4px;
+      }
 
-.scroll-indicator {
-  background: orange;
-  height: 4px;
-  width: 0%;
-  transition: width 0.5s ease-out;
-  position: fixed;
-  top: 20px;
-  left: 0;
-  z-index: 100;
-}
+      .scroll-indicator {
+        background: orange;
+        height: 4px;
+        width: 0%;
+        transition: width 0.5s ease-out;
+        position: fixed;
+        top: 20px;
+        left: 0;
+        z-index: 100;
+      }
 
-.scrollable-images {
-  display: flex;
-  overflow-x: auto;
-  padding: 20px 0;
-  gap: 10px;
-  scrollbar-width: none; /* For Firefox */
-}
+      .scrollable-images {
+        display: flex;
+        overflow-x: auto;
+        padding: 20px 0;
+        gap: 10px;
+        scrollbar-width: none; /* For Firefox */
+      }
 
-.scrollable-images::-webkit-scrollbar {
-  display: none; /* For Chrome, Safari, and Opera */
-}
+      .scrollable-images::-webkit-scrollbar {
+        display: none; /* For Chrome, Safari, and Opera */
+      }
 
-.scrollable-images img {
-  flex: 0 0 auto; /* Do not grow or shrink */
-  max-width: 30%; /* Maximum width for landscape images */
-  max-height: 75vh; /* Maximum height for portrait images */
-  height: auto; /* Ensure the height adjusts to maintain aspect ratio */
-  object-fit: contain; /* Ensure the image is fully visible within the element's box */
-  transition: transform 0.3s, filter 0.3s;
-  filter: grayscale(100%);
-  position: relative;
-}
+      .scrollable-images img {
+        flex: 0 0 auto; /* Do not grow or shrink */
+        max-width: 30%; /* Maximum width for landscape images */
+        max-height: 75vh; /* Maximum height for portrait images */
+        height: auto; /* Ensure the height adjusts to maintain aspect ratio */
+        object-fit: contain; /* Ensure the image is fully visible within the element's box */
+        transition: transform 0.3s, filter 0.3s;
+        /* filter: grayscale(100%); */
+        position: relative;
+      }
 
-.image-caption {
-  display: none;
-  position: absolute;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7); /* Semi-transparent black */
-  color: white;
-  width: 100%;
-  text-align: center;
-  padding: 10px;
-  box-sizing: border-box;
-}
+      /* Additional media query for very narrow viewports */
+      @media screen and (max-width: 480px) {
+        .scrollable-images img {
+          max-width: 75%; /* Allow larger width for smaller screens */
+        }
+      }
+      /* 
+      .scrollable-images img:hover {
+        filter: grayscale(0%);
+      } */
 
-.image-item:hover .image-caption {
-  display: block;
-}
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0, 0, 0, 0.9);
+        padding-top: 80px; /* Adjust this value as needed */
+      }
 
-/* Additional media query for very narrow viewports */
-@media screen and (max-width: 480px) {
-  .scrollable-images img {
-    max-width: 75%; /* Allow larger width for smaller screens */
-  }
-}
+      .modal-content {
+        margin: auto;
+        display: block;
+        max-width: 100%;
+        max-height: 70vh; /* 100% of the viewport height */
+        width: auto;
+        height: auto;
+      }
 
-.scrollable-images img:hover {
-  filter: grayscale(0%);
-}
+      .modal-caption {
+        margin: auto;
+        width: 80%;
+        max-width: 700px;
+        text-align: center;
+        color: white;
+        padding: 10px;
+        line-height: 1.5; 
+      }
 
-.modal {
-  display: none;
-  position: fixed;
-  z-index: 1;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  overflow-y: auto;
-  background-color: rgba(0, 0, 0, 0.9);
-  padding-top: 100px;
-}
+      .close {
+        position: absolute;
+        top: 15px;
+        right: 35px;
+        color: #fff;
+        font-size: 40px;
+        font-weight: bold;
+        cursor: pointer;
+      }
 
-.modal-content {
-  margin: auto;
-  display: block;
-  width: 80%;
-  max-width: 700px;
-  height: auto;
-}
+      .close:hover {
+        color: #bbb;
+      }
 
-.close {
-  position: absolute;
-  top: 15px;
-  right: 35px;
-  color: #f1f1f1;
-  font-size: 40px;
-  cursor: pointer;
-}
+      @media screen and (max-width: 768px) {
+        .gallery-title {
+          font-size: 1.8rem;
+        }
 
-.close:hover {
-  color: #bbb;
-}
-
-@media screen and (max-width: 768px) {
-  .gallery-title {
-    font-size: 1.8rem;
-  }
-
-  .scrollable-images img {
-    width: 50vw;
-  }
-}
-
+        .scrollable-images img {
+          width: 50vw;
+        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="gallery-container">
-        <h1 class="gallery-title">V6 Rating Party</h1>
-        <div class="scroll-indicator" id="scrollIndicator"></div>
-        <div class="scrollable-images" id="imageContainer">
-            <!-- Images will be dynamically inserted here -->
-        </div>
+      <h1 class="gallery-title">V6 Rating Party</h1>
+      <div class="scroll-indicator" id="scrollIndicator"></div>
+      <div class="scrollable-images" id="imageContainer">
+        <!-- Images will be dynamically inserted here -->
+      </div>
     </div>
 
     <!-- The Modal -->
     <div id="myModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="modalImage">
-        <div id="caption"></div>
+      <span class="close" onclick="closeModal()">&times;</span>
+      <img class="modal-content" id="modalImage" />
+      <div class="modal-caption" id="caption"></div>
     </div>
 
+    <script>
+      //-----------------------------Image gallery fn's ----------------------
 
+      const data = [
+        {
+          id: "5572372d-3a46-4b3b-9d4d-a9153612abd0/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `a boxy rough sketch depicting the beauty within horror using flowers on a white background`,
+        },
+        {
+          id: "5572372d-3a46-4b3b-9d4d-a9153612abd0/0_1",
+          w: 1344,
+          h: 896,
+          prompt: `a boxy rough sketch depicting the beauty within horror using flowers on a white background`,
+        },
+        {
+          id: "08134e72-0542-4fb4-a243-8b02b754a60c/0_1",
+          w: 1456,
+          h: 816,
+          prompt: `quant token`,
+        },
+        {
+          id: "40c78240-f4d4-46ce-97f9-dd96c23600c4/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `cyberpunk man, many cables plugged in the skull`,
+        },
+        {
+          id: "1a8a8342-7789-4593-8925-2757b6345832/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `manchurian civilization`,
+        },
+        {
+          id: "c4a7f32f-abf4-45fa-bb46-1d6c1eea9f01/0_1",
+          w: 1344,
+          h: 896,
+          prompt: `art work by Riza Peker.`,
+        },
+        {
+          id: "55749f26-5b2e-42c8-b6b4-a602c243372a/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `golfers in a haunted golf mansion`,
+        },
+        {
+          id: "55749f26-5b2e-42c8-b6b4-a602c243372a/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `golfers in a haunted golf mansion`,
+        },
+        {
+          id: "000f3f94-a727-4af6-9214-2e183f8dfd1f/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `eternity infinite endless hope`,
+        },
+        {
+          id: "0c6fc628-54dd-4488-aa57-061a92b8f424/0_1",
+          w: 816,
+          h: 1456,
+          prompt: `portrait of a 21-year-old man in a black hoodie without a hood`,
+        },
+        {
+          id: "557a05cf-686d-4645-9e7e-bf64f9e369b2/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `3d logo of a gaming room in isometric view, in a slightly cartoonish style`,
+        },
+        {
+          id: "557a05cf-686d-4645-9e7e-bf64f9e369b2/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `3d logo of a gaming room in isometric view, in a slightly cartoonish style`,
+        },
+        {
+          id: "f25227be-6017-4c8d-8aa9-90d75d55f4f8/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Blessed Mother Mary by Morris Louis in the style of the movie Alice in Wonderland classical realism microscopy backlighting`,
+        },
+        {
+          id: "67492fb1-dffa-45ca-8211-d73abf55506b/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `HAWKEYE KID FROM MARVEL WITH HIS BOW AND ARROW`,
+        },
+        {
+          id: "bab78697-b9f2-40e7-8ed6-26010f0fa3af/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `anime brown hair teenager`,
+        },
+        {
+          id: "1de66d6e-919d-43e2-8535-05e191b7d4df/0_0",
+          w: 816,
+          h: 1456,
+          prompt: `state of anxiety`,
+        },
+        {
+          id: "f69ac3cd-c76d-44c2-89de-9824f6922972/0_1",
+          w: 896,
+          h: 1344,
+          prompt: `Mama Bear, Professional T-Shirt Design`,
+        },
+        {
+          id: "c33ad492-965e-45a9-958d-f6a7578d4dae/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `a grumpy cat in an oversized tuxedo, alcohol ink, rich colors`,
+        },
+        {
+          id: "ac05c95b-6544-4863-a10c-6f25810e5e81/0_1",
+          w: 1456,
+          h: 816,
+          prompt: `Negotiation techniques for purchasing an e-commerce site`,
+        },
+        {
+          id: "ac05c95b-6544-4863-a10c-6f25810e5e81/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `Negotiation techniques for purchasing an e-commerce site`,
+        },
+        {
+          id: "ac0099a4-5b26-470d-9475-725ea093845f/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `half human half tortoise with mushrooms growing on his shell`,
+        },
+        {
+          id: "ac0099a4-5b26-470d-9475-725ea093845f/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `half human half tortoise with mushrooms growing on his shell`,
+        },
+        {
+          id: "f2e00ca0-688b-4ca8-a54e-71bbcc2313f5/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `cyberpunk timbuktu mosque`,
+        },
+        {
+          id: "caba0cd8-ab40-4703-82e9-4924824596ed/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `red snake surrouned by red fire with sparks of black`,
+        },
+        {
+          id: "201eda60-fbea-47f5-8f4d-cf3e025483e3/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `women with brown hair traveling plain bichon frise`,
+        },
+        {
+          id: "f092b3ca-39ce-4bd7-8f0c-c44f8f95fa7e/0_0",
+          w: 816,
+          h: 1456,
+          prompt: `A man who is tired and talks all the time`,
+        },
+        {
+          id: "17d3b222-f396-4403-bb4a-c9c13e975e0a/0_0",
+          w: 816,
+          h: 1456,
+          prompt: `anime sad boy in a room front of window in a rain with fog darkness`,
+        },
+        {
+          id: "c62458a6-eb38-443e-97fe-2383645c919f/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `appa made from fire from avatar the last airbender`,
+        },
+        {
+          id: "bb39e34f-099b-43bd-a707-403c52dacd25/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Smoking, harm, cancer and family destroyed`,
+        },
+        {
+          id: "947b6894-756e-4d2d-8fef-dbdbe6727d32/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `girl dressed in closes designed in glass`,
+        },
+        {
+          id: "c7dffa72-acab-4486-bb17-243aa79b0a78/0_1",
+          w: 896,
+          h: 1344,
+          prompt: `texas longhorn hill country meadows`,
+        },
+        {
+          id: "c7dffa72-acab-4486-bb17-243aa79b0a78/0_0",
+          w: 896,
+          h: 1344,
+          prompt: `texas longhorn hill country meadows`,
+        },
+        {
+          id: "d4638e1a-2d79-4a54-98c9-c45f0a9cbd04/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `CHEMICAL TREATMENT FOR RAW WATER PREPARATION AND WASTE WATER REUSE`,
+        },
+        {
+          id: "c175f637-1be9-4634-b249-23825f0ea416/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `the order of the dark brotherhood sits in a circle around a campfire and drinks beer.`,
+        },
+        {
+          id: "2613c332-4f18-4000-900e-96e4cc0c6a26/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `kawasaki ninja h2 with pink lightning bolts coming out of headlights`,
+        },
+        {
+          id: "23083d35-0c53-492e-abd4-0bc9b9838c4b/0_1",
+          w: 896,
+          h: 1344,
+          prompt: `smiling kazakh little boy t-shirt wearing with traffic sign in hand waist-high with kids riding bikes on background`,
+        },
+        {
+          id: "fc964231-40b0-4d3b-bb16-140544ae9c25/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `an african american teenager dressed in all black`,
+        },
+        {
+          id: "a0a1fcbf-d778-4a25-bbbd-c6079ba24129/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `muscular man standing, lion face,`,
+        },
+        {
+          id: "c7dd8714-30c4-468a-9485-90f2e2d815c3/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `smarty hamster, multiple view, reference sheet`,
+        },
+        {
+          id: "c7dd8714-30c4-468a-9485-90f2e2d815c3/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `smarty hamster, multiple view, reference sheet`,
+        },
+        {
+          id: "6d0553a3-1503-494a-8b77-0ae0bab11eca/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `dragonfly spaceship headed to outterspace`,
+        },
+        {
+          id: "f0f413e7-746f-4c3f-b7af-6a7088cbc46c/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `road sidewalk block`,
+        },
+        {
+          id: "7be69564-5d0c-4bc3-b6fc-4d18cb02836e/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `female had with flowers in hair black and white pencil drawing on florall pattern`,
+        },
+        {
+          id: "8b243cc7-a121-4ddf-bc45-e258509240dc/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `a Dragonborn warrior in very dark and moody tones. Somewhat surrealist`,
+        },
+        {
+          id: "c7db07fd-037a-4d35-b8f6-f2c5512b1914/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `a yellow toyota camry top cut-out view`,
+        },
+        {
+          id: "c7db07fd-037a-4d35-b8f6-f2c5512b1914/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `a yellow toyota camry top cut-out view`,
+        },
+        {
+          id: "cfd6bfee-bdba-42b3-a905-94f75273d65a/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `gandalf pipe watercolor`,
+        },
+        {
+          id: "cb3dfbfe-5bad-434c-811c-033436d778a3/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `Tom Hiddleston Loki and Jessica Jones`,
+        },
+        {
+          id: "04da82d9-e104-4baa-82e6-1d656e89d00b/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `A man and a robot building a golden brick bridge, pixar style`,
+        },
+        {
+          id: "429758ce-63a8-4810-b1ea-70cab11f5f8f/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `rat enemy sticker animal`,
+        },
+        {
+          id: "dc0fe15a-e901-4fa9-b30e-b788a8a9aa9b/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `A black and white COLORING PAGE for children featuring a 12 year old blonde girl portrayed as Quarryman worker uniform drilling rock and minerals from quarries and mines, crisp clean clear lines`,
+        },
+        {
+          id: "dc0fe15a-e901-4fa9-b30e-b788a8a9aa9b/0_1",
+          w: 1344,
+          h: 896,
+          prompt: `A black and white COLORING PAGE for children featuring a 12 year old blonde girl portrayed as Quarryman worker uniform drilling rock and minerals from quarries and mines, crisp clean clear lines`,
+        },
+        {
+          id: "0165c791-6d5a-413a-b2b4-33e02c89febd/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `wooden instrument for kitchen`,
+        },
+        {
+          id: "e87240c9-cd25-4b00-abeb-fe6f8c252c5f/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Dark Magician Girl casting a spell floating above a ruined city`,
+        },
+        {
+          id: "329afc92-0892-4427-a70d-d225bfb09bba/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `girasole fatto all'uncinetto, stile amigurumi`,
+        },
+        {
+          id: "e14029eb-30b5-46cc-b8b2-c60d48843ca3/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `backstage at the Kenzo ss23 fashion show`,
+        },
+        {
+          id: "dc0e6972-c106-403f-800d-449568eac4ad/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `a combination of garlic and chandelier`,
+        },
+        {
+          id: "dc0e6972-c106-403f-800d-449568eac4ad/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `a combination of garlic and chandelier`,
+        },
+        {
+          id: "dc11cf96-4c91-4715-ac36-453a50e04cfc/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `a astronaut lying in a greenfield with flowers`,
+        },
+        {
+          id: "dc11cf96-4c91-4715-ac36-453a50e04cfc/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `a astronaut lying in a greenfield with flowers`,
+        },
+        {
+          id: "dc0fb3a8-b660-4884-acf9-8df27a487523/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `by bokeh lens, an upside down car wash on top of a blue building with a tree behind it`,
+        },
+        {
+          id: "dc0fb3a8-b660-4884-acf9-8df27a487523/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `by bokeh lens, an upside down car wash on top of a blue building with a tree behind it`,
+        },
+        {
+          id: "dc154702-ca20-460b-8505-e6731a0e0f30/0_0",
+          w: 896,
+          h: 1344,
+          prompt: `truman reimagined as a supervillan in control of the world, purple hue`,
+        },
+        {
+          id: "dc154702-ca20-460b-8505-e6731a0e0f30/0_1",
+          w: 896,
+          h: 1344,
+          prompt: `truman reimagined as a supervillan in control of the world, purple hue`,
+        },
+        {
+          id: "97bc3e0c-4dad-4855-9a18-3c0072399a4b/0_1",
+          w: 896,
+          h: 1344,
+          prompt: `jewish man, devil horns, goyslop`,
+        },
+        {
+          id: "f63cf2b8-1e84-49af-bcd3-4e79c4c8529c/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `traditional japanese ink illustration anime girl with devil horns and scythe`,
+        },
+        {
+          id: "36f2f0d3-ba09-4ca1-ab4f-ab7631a52d2f/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `epic poster of woman in the spotlight on the roof of a skyscraper, comic style, illustration in purple colors`,
+        },
+        {
+          id: "8ab4058a-f0fd-4320-8929-c15ec78fa095/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `the four horsemen of doom`,
+        },
+        {
+          id: "124f4265-b4b3-4549-bf6a-ead0b0593091/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `prude white cat with black glasses`,
+        },
+        {
+          id: "124f4265-b4b3-4549-bf6a-ead0b0593091/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `prude white cat with black glasses`,
+        },
+        {
+          id: "9e65af4f-4477-41a5-b9b5-6cf5e464027d/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `a hand with a phone sticks out of the ground, post-apocalypse`,
+        },
+        {
+          id: "be65a5d6-d1e3-4a37-943a-382a9a96bed1/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `figure girl on coffee latte art`,
+        },
+        {
+          id: "9462155b-63c4-4e78-b628-ccfd6e500e68/0_1",
+          w: 896,
+          h: 1344,
+          prompt: `a tough guy with long brown hair laying in the middle of a circle of guns pointed at gun, laughing`,
+        },
+        {
+          id: "945f1b0a-090e-467c-b782-5cc85a4ec305/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `a pattern language by Keith Harring and Eugene Delacroix`,
+        },
+        {
+          id: "124b77ce-6085-4da1-9ccf-7b334a1f0812/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `fantastic world whit crystal castles, cloud, dragons`,
+        },
+        {
+          id: "124b77ce-6085-4da1-9ccf-7b334a1f0812/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `fantastic world whit crystal castles, cloud, dragons`,
+        },
+        {
+          id: "361d172c-e36c-49d9-b787-b8b712da78c3/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `man walking into the fire corn field`,
+        },
+        {
+          id: "0ea37b1d-ae09-4540-afb4-4127e726ea4e/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `neural network of a person impaired with psichyatric conditions`,
+        },
+        {
+          id: "ce50977c-f2a3-4c23-bf6a-4d3636948339/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `A post-impressionist painting of a zombie by Vincent Van Gogh`,
+        },
+        {
+          id: "b6786a4a-87cc-4050-acd7-b6754f202973/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `Portrait of Mary Poppins with umbrella and hat`,
+        },
+        {
+          id: "124aa109-33fd-459e-a0a9-5aa1c35d4f7b/0_1",
+          w: 816,
+          h: 1456,
+          prompt: `photo of showing customer first approach for a software development company`,
+        },
+        {
+          id: "124aa109-33fd-459e-a0a9-5aa1c35d4f7b/0_0",
+          w: 816,
+          h: 1456,
+          prompt: `photo of showing customer first approach for a software development company`,
+        },
+        {
+          id: "257c6bc7-bd77-4fdf-b7d5-a4a50d4bee64/0_1",
+          w: 816,
+          h: 1456,
+          prompt: `shrek in the style of the princess bride Rob Reiner 87s`,
+        },
+        {
+          id: "7401a2f0-8631-452e-b32b-f6876913197e/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `african-american frmale dragon rider petting a red dragon head`,
+        },
+        {
+          id: "68dc9dcc-7ea4-4a50-87d5-8ced34ee9bd4/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `line design black and white super hero`,
+        },
+        {
+          id: "9f85715e-e0ca-4f9e-afba-ef2ffb8cb354/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `Connor McGregor with gun in octagon fighting with Jon Jones`,
+        },
+        {
+          id: "5c4c859d-8c36-4156-b217-aa21d444cae7/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `tattoo of a cat with flower petals growing off of it`,
+        },
+        {
+          id: "e40caeb3-9299-4408-85be-baee20da59c2/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `urban art toy vinyl style mixing the joker and darthvader with isolate white background chibi version`,
+        },
+        {
+          id: "617ed266-bbef-466f-9191-23b490751ddf/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `chess board with minions as its pieces`,
+        },
+        {
+          id: "ded9775b-d518-4247-81d8-9c6f27f52efb/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `elaine benes in red leather jumpsuit`,
+        },
+        {
+          id: "9383b41b-1c3b-4dcb-9928-1c0930a37a22/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `king's trousers with gold and red diamonds`,
+        },
+        {
+          id: "5300e05d-5281-43a1-b326-e640af113dfa/0_0",
+          w: 896,
+          h: 1344,
+          prompt: `silk twisted into a rope`,
+        },
+        {
+          id: "c490e1e7-9e46-49a7-a1e0-b047709ad9e0/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `duracell battery of light by magritte`,
+        },
+        {
+          id: "342e27a9-8280-42b7-bef8-8dc0b223c425/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `black and white sketch, A group of people queuing for meals in the bafe`,
+        },
+        {
+          id: "0f511117-b00a-4804-8ff6-952ec5010983/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `snowboarder with a joint in his mouth`,
+        },
+        {
+          id: "9f193c10-1759-4f75-bca6-f4d69de0ce6f/0_0",
+          w: 816,
+          h: 1456,
+          prompt: `glass of wine on the dining table dark aesthetic dark green`,
+        },
+        {
+          id: "35593566-b03f-4bbd-a326-0bc5b10eac31/0_1",
+          w: 1344,
+          h: 896,
+          prompt: `a bodybuilder catdog`,
+        },
+        {
+          id: "35593566-b03f-4bbd-a326-0bc5b10eac31/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `a bodybuilder catdog`,
+        },
+        {
+          id: "355bfa1f-f07d-4201-9ed2-0393fd5a99bf/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `what it means to be a father`,
+        },
+        {
+          id: "355bfa1f-f07d-4201-9ed2-0393fd5a99bf/0_1",
+          w: 1456,
+          h: 816,
+          prompt: `what it means to be a father`,
+        },
+        {
+          id: "443970f5-66e9-47e6-a786-b0c011f9ec22/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `little girl swinging from a vine like a female Tarzan from the jungle. She has dirty blonde hair and is wearing urban clothes.**`,
+        },
+        {
+          id: "443970f5-66e9-47e6-a786-b0c011f9ec22/0_1",
+          w: 1344,
+          h: 896,
+          prompt: `little girl swinging from a vine like a female Tarzan from the jungle. She has dirty blonde hair and is wearing urban clothes.**`,
+        },
+        {
+          id: "ba868e3f-9421-4265-b523-dda708cbc32b/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `an AI collage`,
+        },
+        {
+          id: "5d39220a-40de-4aa6-8c96-2352a0331d8c/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `anthropamorphic canary coalminer`,
+        },
+        {
+          id: "91b7fe21-0f38-43d2-bc92-93020db32fca/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Pretty islamic mosque entrance at the top of the steps in the style of an oil painting`,
+        },
+        {
+          id: "446080ce-d207-4a6c-96c4-9cb59850844c/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `a mountain goat on mount everest`,
+        },
+        {
+          id: "44358466-b743-4a2e-adc5-4bd02891cd40/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Desk, Computer screen, Hacker attack screen by Studio Ghibli`,
+        },
+        {
+          id: "44358466-b743-4a2e-adc5-4bd02891cd40/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `Desk, Computer screen, Hacker attack screen by Studio Ghibli`,
+        },
+        {
+          id: "5a51b5aa-91d5-48b0-8817-3c3a8a47c742/0_1",
+          w: 1456,
+          h: 816,
+          prompt: `give me new aperiodic pattern in black and white with ideology of Tongji University, abstract`,
+        },
+        {
+          id: "5a51b5aa-91d5-48b0-8817-3c3a8a47c742/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `give me new aperiodic pattern in black and white with ideology of Tongji University, abstract`,
+        },
+        {
+          id: "5a4d48d5-e9bc-4368-a066-41049ebd34a2/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `paper cut out style dream scene`,
+        },
+        {
+          id: "5a4d48d5-e9bc-4368-a066-41049ebd34a2/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `paper cut out style dream scene`,
+        },
+        {
+          id: "3c6f6d2d-da0e-4b45-8824-aa7df94bd2c2/0_1",
+          w: 1456,
+          h: 816,
+          prompt: `Nan Thailand night life poster glow`,
+        },
+        {
+          id: "ccadf20a-f9d3-461c-ae45-0a21029992e8/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Kanye west as a Disney charater`,
+        },
+        {
+          id: "5a5207f6-ce01-4862-bdee-bfd3fd8c1c73/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `Boromir from Lord of the Rings as Sauron the dark lord of Mordor, wearing a spiky sauron crown`,
+        },
+        {
+          id: "5a5207f6-ce01-4862-bdee-bfd3fd8c1c73/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Boromir from Lord of the Rings as Sauron the dark lord of Mordor, wearing a spiky sauron crown`,
+        },
+        {
+          id: "5a4e6984-70a4-4333-94e7-2981b048232d/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `SS krishna`,
+        },
+        {
+          id: "5a4e6984-70a4-4333-94e7-2981b048232d/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `SS krishna`,
+        },
+        {
+          id: "3569b47f-c43e-4997-bdfa-7550f518ed43/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `little goomba in bright clouds`,
+        },
+        {
+          id: "29edfdf5-a53f-44dd-8409-dc62cc16c0b8/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `halfing ranger with a shield in his left hand. a giant gecko pet next to him fantasy D&D`,
+        },
+        {
+          id: "a2ff59b3-8c91-4bb2-808b-0fda7e959ab9/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `super closeup of a blank price of paper on a table, artificial lighting`,
+        },
+        {
+          id: "5cecf0a6-7788-48d1-92e3-b62e61db86ce/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `give me a romanticism landscape picture without the frame in Russian style`,
+        },
+        {
+          id: "243169a2-f270-4fe0-8454-58cdafec6a5a/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `stimpank, male,`,
+        },
+        {
+          id: "7b3856b8-2adb-47af-a3f9-d7f79854bce9/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Anubis with an open hand coming in front of him`,
+        },
+        {
+          id: "bedd8f30-614d-4bae-90a4-04b893b78d98/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `woman. Conundrum`,
+        },
+        {
+          id: "53c346ac-4361-4739-913b-25d0ccac9366/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `generate a logo of a security guard pointing a gun`,
+        },
+        {
+          id: "e1417657-daef-4bb2-98bf-21d38951ac59/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `Looking down from high in the sky, you can see the British villa on the deserted beach, with a long staircase leading to the seashore`,
+        },
+        {
+          id: "c1391986-7d2b-4f86-bb7d-9d0afa940904/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `a melting eye floating in the sky`,
+        },
+        {
+          id: "3fa0ceb7-b599-4270-99b5-5f1e31376460/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `young woman standing in front of oxford university in daylight street scene in background and pedestrians in style of petra collins`,
+        },
+        {
+          id: "03b4f3ce-7bef-4bc8-91c3-602d7f100280/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `happy pub`,
+        },
+        {
+          id: "6559e3f8-7299-42a8-853f-59bd5b2423cb/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `mechanical cat eye`,
+        },
+        {
+          id: "6559e3f8-7299-42a8-853f-59bd5b2423cb/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `mechanical cat eye`,
+        },
+        {
+          id: "84c2591b-0711-4dea-bfb7-aa9218abb69e/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `boba fett as an anime character, anime style, 2d`,
+        },
+        {
+          id: "d5342b6d-d6de-4438-87d2-c880de759a38/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `playing cards`,
+        },
+        {
+          id: "655d3313-754f-4666-8c48-32d277b549be/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `adorable panda, childrens book art style, 3d model with lighting and shading`,
+        },
+        {
+          id: "655d3313-754f-4666-8c48-32d277b549be/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `adorable panda, childrens book art style, 3d model with lighting and shading`,
+        },
+        {
+          id: "52810760-942e-4793-a009-631d39c77ce9/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `A Rabbit look moon and celebrate fairy mid-autumn festival Surrealism`,
+        },
+        {
+          id: "2d855d58-886f-41a0-8dad-91e61c03b897/0_1",
+          w: 1456,
+          h: 816,
+          prompt: `black woman with autumn leaves, coffee, book around png art watercolor`,
+        },
+        {
+          id: "655cb05b-61c9-4bf2-bd57-aa133b344c1f/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `8 bits nft of cyberpunk solo guy, matrix style`,
+        },
+        {
+          id: "655cb05b-61c9-4bf2-bd57-aa133b344c1f/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `8 bits nft of cyberpunk solo guy, matrix style`,
+        },
+        {
+          id: "485fd442-8062-49c5-a796-7663345572b8/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `White background, no background, person carrying a bag of things`,
+        },
+        {
+          id: "984e2e2b-88c7-41a0-8bca-f9b2e9555962/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `jasmine aladdin superheroine`,
+        },
+        {
+          id: "7e5b750b-ce19-4d9a-be7a-1ffeab3611bb/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `Vintage Living on the sun`,
+        },
+        {
+          id: "7e5b750b-ce19-4d9a-be7a-1ffeab3611bb/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Vintage Living on the sun`,
+        },
+        {
+          id: "762ca2ed-3ce1-46c8-822c-3d516b99a033/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `write the Phrase Razec Marketing on a Black background with letters that look like Precious metal, gold, silver`,
+        },
+        {
+          id: "bcce6282-f3c7-470d-8e59-00abc2e7113b/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `blonde dance mafia`,
+        },
+        {
+          id: "7e5ad885-81e0-4e09-9b8d-0d448b1ea4f3/0_1",
+          w: 1456,
+          h: 816,
+          prompt: `tajine knolling`,
+        },
+        {
+          id: "7e5ad885-81e0-4e09-9b8d-0d448b1ea4f3/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `tajine knolling`,
+        },
+        {
+          id: "7e5881fe-e108-4e4d-9c26-0d03b96f3aa3/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `santa cat Starry Night, Van Gogh Cat`,
+        },
+        {
+          id: "7e5881fe-e108-4e4d-9c26-0d03b96f3aa3/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `santa cat Starry Night, Van Gogh Cat`,
+        },
+        {
+          id: "a1343680-fa0e-4ff9-9aaf-37743b030168/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `hot female prone`,
+        },
+        {
+          id: "f6c09e4b-39cc-47b3-b55e-37fffdcd0124/0_1",
+          w: 1344,
+          h: 896,
+          prompt: `a woman who's jewish. In Belarus. She's half vietnamese`,
+        },
+        {
+          id: "4b41fec2-4fd0-48d6-9767-7ecbc18acb1d/0_1",
+          w: 1456,
+          h: 816,
+          prompt: `Camel in desert landscape in morocco`,
+        },
+        {
+          id: "88e3a135-5d0f-414b-8760-e61e02e1a6e9/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Help me create a simple gray and white picture with a very sense of space.`,
+        },
+        {
+          id: "568f19f9-743f-47c5-8fa2-0b1271f437b2/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `sketch of porsche 911`,
+        },
+        {
+          id: "fec49319-ec8a-43e8-9c25-7a4c2f719f22/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `tiny organic lines pressed transparent`,
+        },
+        {
+          id: "139c3210-3f72-4dbd-80ec-abcef5a4299e/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `funny rasta flying to space, white background`,
+        },
+        {
+          id: "94977926-0738-4a8a-af89-0429966d9b8e/0_0",
+          w: 816,
+          h: 1456,
+          prompt: `baby dino sushi restaurant chef japanese cooking nigiri red`,
+        },
+        {
+          id: "7e5e5639-357f-42c8-9d00-25aff533ae1c/0_1",
+          w: 896,
+          h: 1344,
+          prompt: `line art for colouring page for book. Simple but aesthetic. Wide street in steampunk city`,
+        },
+        {
+          id: "7e5e5639-357f-42c8-9d00-25aff533ae1c/0_0",
+          w: 896,
+          h: 1344,
+          prompt: `line art for colouring page for book. Simple but aesthetic. Wide street in steampunk city`,
+        },
+        {
+          id: "a2e4916b-7d1a-40d6-b330-7d5631d74cdb/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `Virtual interface augmented reality background forest neon colors`,
+        },
+        {
+          id: "a2e4916b-7d1a-40d6-b330-7d5631d74cdb/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Virtual interface augmented reality background forest neon colors`,
+        },
+        {
+          id: "0aa13890-bdf8-4d83-946b-e2344238212b/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `pug sitting inside a backhoe cab`,
+        },
+        {
+          id: "d8665fcb-d656-4932-9cce-4589be6bc85d/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `jeff koons painting`,
+        },
+        {
+          id: "a2e6a0ac-9bb2-4e67-99dc-222b3e6efd91/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `1970s historical epic movie poster, Napoleon, directed by Stanley Kubrick`,
+        },
+        {
+          id: "a2e6a0ac-9bb2-4e67-99dc-222b3e6efd91/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `1970s historical epic movie poster, Napoleon, directed by Stanley Kubrick`,
+        },
+        {
+          id: "28fbef19-1644-4b8f-b6a0-64b4af477ea0/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `mid-century modern seamless repeating pattern on burlap by Darrell K. Sweet, symmetry`,
+        },
+        {
+          id: "cb082104-bfb3-4a0f-afed-e9fb6424b252/0_0",
+          w: 896,
+          h: 1344,
+          prompt: `kaidou smoking a segreet`,
+        },
+        {
+          id: "a36eb7ce-294a-44df-8578-9536890fb3a7/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `a photo of cute pug puppies running through a rain forest`,
+        },
+        {
+          id: "26f06217-3cd9-4679-a542-36f1c238e3ab/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Equipment catalog and reference sheet for novice adventurers`,
+        },
+        {
+          id: "a2e3b401-764b-4e7c-85a8-add5fce0aae7/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `epic fractle apple computer desktop wallpaper`,
+        },
+        {
+          id: "a2e3b401-764b-4e7c-85a8-add5fce0aae7/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `epic fractle apple computer desktop wallpaper`,
+        },
+        {
+          id: "a2e748ee-8762-48f1-9253-b351a34cc2c8/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `antique voltaire armchair engraving style`,
+        },
+        {
+          id: "a2e748ee-8762-48f1-9253-b351a34cc2c8/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `antique voltaire armchair engraving style`,
+        },
+        {
+          id: "d14af078-d7af-475e-a8e2-de8bd03af241/0_1",
+          w: 1456,
+          h: 816,
+          prompt: `Pope dancing a pink tutu, in his church`,
+        },
+        {
+          id: "da8bb417-ae3c-40f8-98b0-5d0bc862a2c2/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `math as a humam`,
+        },
+        {
+          id: "2ada54ea-1f6e-46c3-9819-369fe8c6ba52/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `well packed Hot Wheels toy car of rare styles, knolling display, cinematic tone`,
+        },
+        {
+          id: "55d33006-90db-4bea-b4f1-fac55e5fbf63/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `freaks creatures`,
+        },
+        {
+          id: "a2e4db5c-d32d-475d-b74c-ae6e89e13bf6/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `a silhouetted background of an androgynous person against a purple backdrop, in the style of david sims, intense gaze`,
+        },
+        {
+          id: "a2e4db5c-d32d-475d-b74c-ae6e89e13bf6/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `a silhouetted background of an androgynous person against a purple backdrop, in the style of david sims, intense gaze`,
+        },
+        {
+          id: "0cd24a93-313d-4ddb-b241-51c6785d903f/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `character Wednesday adams, braids, comic art by al feldstein`,
+        },
+        {
+          id: "5032a277-8c5c-4ba5-bd50-bbf9b1099839/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `Use a magnifying glass to look at a blank piece of paper with a JOB written on it,cartoon style`,
+        },
+        {
+          id: "991d366b-1fce-4ca5-a518-0568fe238c34/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `a grid of 60 oscillators which are circle, 10*6`,
+        },
+        {
+          id: "934530ea-d310-4d8c-8065-88661285ffa6/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `3D style cartoon old woman and man close-up front view surprised Los Angeles`,
+        },
+        {
+          id: "48cf829e-79e5-4512-9f47-dbf6d6fec028/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `pillow fort in the countryside`,
+        },
+        {
+          id: "f6a1977c-cbde-4f64-845c-6951af14c5be/0_1",
+          w: 1456,
+          h: 816,
+          prompt: `sixt car hire, experience of the future, car hire pick up`,
+        },
+        {
+          id: "c268c9ff-144c-4ef4-9c08-517803f14f91/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `after 100years Street of korea`,
+        },
+        {
+          id: "8cc7de21-5713-4920-bdf9-03ea06bd837b/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `A general about 60 years old is in the office`,
+        },
+        {
+          id: "c4600bb4-d513-43f9-b657-52faabf39360/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `Poppy League of Legends Green`,
+        },
+        {
+          id: "c4600bb4-d513-43f9-b657-52faabf39360/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `Poppy League of Legends Green`,
+        },
+        {
+          id: "0e0ad780-97b9-40ed-bacb-57be08f83e8f/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `a group of human sized militarized robots, patrolling the streets in a dystopian future.`,
+        },
+        {
+          id: "f42fab8d-2518-419b-b7ee-019001298272/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `samourai fight`,
+        },
+        {
+          id: "99e15786-e680-49d1-bd00-e954c648eeb1/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `A man looking back on his bitter memories, captured in a photograph with the ambiance of a brightly lit room and a clear blue sky outside`,
+        },
+        {
+          id: "ee9da827-2f8c-4d73-867f-391905dba7b4/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `flying chicken with metal exoskeleton`,
+        },
+        {
+          id: "cb77f01a-6331-468f-9934-938ce661f9c8/0_1",
+          w: 816,
+          h: 1456,
+          prompt: `expressive craft of woman made of paper`,
+        },
+        {
+          id: "d4a90637-d946-424f-af11-f60015fc15d3/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `work the tongue intelligently, vector, artwork by Yiannis Moralis`,
+        },
+        {
+          id: "d245e1d3-e924-4b14-92f0-dfba602724aa/0_1",
+          w: 816,
+          h: 1456,
+          prompt: `gray bearded dark haired adventurer coming out of a cave`,
+        },
+        {
+          id: "d245e1d3-e924-4b14-92f0-dfba602724aa/0_0",
+          w: 816,
+          h: 1456,
+          prompt: `gray bearded dark haired adventurer coming out of a cave`,
+        },
+        {
+          id: "60d53abd-12a3-4abe-9cd3-4d7de4df927a/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `high quality, flying dragon spitting fire in the sky`,
+        },
+        {
+          id: "8b71ef15-2e58-4038-b0be-8d9e86c4645b/0_0",
+          w: 1456,
+          h: 816,
+          prompt: `1800 magic trick theatre poster`,
+        },
+        {
+          id: "d2487774-ff3c-4b31-8535-24f2072caae5/0_1",
+          w: 1024,
+          h: 1024,
+          prompt: `boris johnson as beer thor`,
+        },
+        {
+          id: "d2487774-ff3c-4b31-8535-24f2072caae5/0_0",
+          w: 1024,
+          h: 1024,
+          prompt: `boris johnson as beer thor`,
+        },
+        {
+          id: "d2441298-1e94-43d1-ab53-ef2d3cbd0bdf/0_1",
+          w: 1344,
+          h: 896,
+          prompt: `Greek Roman statue submerged in colored balls`,
+        },
+        {
+          id: "d2441298-1e94-43d1-ab53-ef2d3cbd0bdf/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `Greek Roman statue submerged in colored balls`,
+        },
+        {
+          id: "d24c84f2-4c15-4f1c-8efb-83186b3f7457/0_0",
+          w: 1344,
+          h: 896,
+          prompt: `a top view pont for a refrigerator`,
+        },
+        {
+          id: "d24c84f2-4c15-4f1c-8efb-83186b3f7457/0_1",
+          w: 1344,
+          h: 896,
+          prompt: `a top view pont for a refrigerator`,
+        },
+      ];
 
-<script>
-//-----------------------------Image gallery fn's ----------------------
+      let scrollSpeed = 0;
+      const maxTiltAngle = 15;
+      const maxScale = 1.6;
+      const scaleSpeedFactor = 0.05;
 
-const data = [
-    {'id': '758a1393-3771-4e01-aa42-09a08e93f4ab/0_0', 'w': 1024, 'h': 1024, 'prompt': `blurred paint background`},
-    {'id': 'feb40a28-d128-4445-bd7e-698321a56e5c/0_1', 'w': 1024, 'h': 1024, 'prompt': `roblox vs minecraft stabbing`},
-    {'id': '472dcaf2-a66e-4b49-b4e2-bdd4a0b9923e/0_1', 'w': 1024, 'h': 1024, 'prompt': `cackler, oil painting`},
-    {'id': '5e06cec3-b19d-4975-b29a-fed51512c356/0_1', 'w': 1024, 'h': 1024, 'prompt': `waiter in the style of art in the style of Herbert List`},
-    {'id': 'aeaacebf-2328-43f7-bd12-640e2ac15bc7/0_0', 'w': 1024, 'h': 1024, 'prompt': `tacos in the style of art in the style of Qi Baishi`},
-    {'id': 'aeaacebf-2328-43f7-bd12-640e2ac15bc7/0_1', 'w': 1024, 'h': 1024, 'prompt': `tacos in the style of art in the style of Qi Baishi`},
-    {'id': 'd0c808c6-5dff-4a01-9191-31cbf9c9ad1d/0_0', 'w': 816, 'h': 1456, 'prompt': `pretty line art of a picnic on the beath`},
-    {'id': 'd0c808c6-5dff-4a01-9191-31cbf9c9ad1d/0_1', 'w': 816, 'h': 1456, 'prompt': `pretty line art of a picnic on the beath`},
-    {'id': '59fc9b69-6a7b-4cf1-98cc-8272acfbcccf/0_0', 'w': 896, 'h': 1344, 'prompt': `anime boy window blue`},
-    {'id': '196530ce-1567-458f-b34d-53e89b67b8bc/0_0', 'w': 1456, 'h': 816, 'prompt': `ryan gosling squatting in black adidas track top`},
-    {'id': '081e9cc0-1663-4211-9a9f-73ee2c73daaa/0_1', 'w': 1024, 'h': 1024, 'prompt': `perfume in the style of art in the style of Christopher Shy`},
-    {'id': '5f65e83b-1623-4393-af0f-7429c92a17ca/0_0', 'w': 1456, 'h': 816, 'prompt': `Modern war, Russian soldier, holds the defense`},
-    {'id': 'f73d1aa7-406d-47aa-a2b5-b443732d793e/0_1', 'w': 896, 'h': 1344, 'prompt': `a flower or garden presenting hope and joy in artistic style, Utagawa Hiroshige, ukiyo-e`},
-    {'id': 'f73d1aa7-406d-47aa-a2b5-b443732d793e/0_0', 'w': 896, 'h': 1344, 'prompt': `a flower or garden presenting hope and joy in artistic style, Utagawa Hiroshige, ukiyo-e`},
-    {'id': '399a3d4a-adee-48f5-a51d-4aedbeac8668/0_0', 'w': 1024, 'h': 1024, 'prompt': `very masculine abstract paint, men colors`},
-    {'id': '2673f629-764f-4f87-84d7-9539f482beeb/0_1', 'w': 1024, 'h': 1024, 'prompt': `image of a soaring dove, color scheme is shades of purple, plain white background`},
-    {'id': 'ee1e6ad2-28a4-4856-995f-6d07d027d082/0_1', 'w': 1024, 'h': 1024, 'prompt': `pink casino interior with sloy machines, dark pink hue`},
-    {'id': 'ee1e6ad2-28a4-4856-995f-6d07d027d082/0_0', 'w': 1024, 'h': 1024, 'prompt': `pink casino interior with sloy machines, dark pink hue`},
-    {'id': 'c1728b74-0bb0-4e6a-8e31-c18037f5541b/0_0', 'w': 1024, 'h': 1024, 'prompt': `extreme close of amazed female and male accountants with giant calculators looking inside a gigantic futuristic brain surrounded by a colorful swirl of dollar bills, charts, currency symbols glitchcore style creative imagination sunny RGB`},
-    {'id': 'c1728b74-0bb0-4e6a-8e31-c18037f5541b/0_1', 'w': 1024, 'h': 1024, 'prompt': `extreme close of amazed female and male accountants with giant calculators looking inside a gigantic futuristic brain surrounded by a colorful swirl of dollar bills, charts, currency symbols glitchcore style creative imagination sunny RGB`},
-    {'id': 'd68aa909-dd07-4c34-bc8f-f597124b1ce5/0_1', 'w': 1024, 'h': 1024, 'prompt': `war with tank`},
-    {'id': 'd68aa909-dd07-4c34-bc8f-f597124b1ce5/0_0', 'w': 1024, 'h': 1024, 'prompt': `war with tank`},
-    {'id': '572778a4-9c68-4675-9c16-62153e3b576f/0_1', 'w': 1024, 'h': 1024, 'prompt': `blueprint of a neural network halftone print`},
-    {'id': '3db9e67b-e11b-4ae6-8212-98b3a6b1cf06/0_0', 'w': 1024, 'h': 1024, 'prompt': `Skull Insignia, Simple`},
-    {'id': 'd6d6ba70-afac-41f1-af15-205147960e23/0_0', 'w': 1344, 'h': 896, 'prompt': `want to make flyer golf travel`},
-    {'id': 'd6d6ba70-afac-41f1-af15-205147960e23/0_1', 'w': 1344, 'h': 896, 'prompt': `want to make flyer golf travel`},
-    {'id': '28d72e9a-015b-4612-b9f2-f79975ceebed/0_1', 'w': 1024, 'h': 1024, 'prompt': `A glimpse into Red Bird's residence located a mile south of the Agency, its welcoming warmth juxtaposed against the creeping cold of the night, by Bill Brandt`},
-    {'id': '28d72e9a-015b-4612-b9f2-f79975ceebed/0_0', 'w': 1024, 'h': 1024, 'prompt': `A glimpse into Red Bird's residence located a mile south of the Agency, its welcoming warmth juxtaposed against the creeping cold of the night, by Bill Brandt`},
-    {'id': 'c7b41bd3-47ae-413e-bae9-547789d4bb99/0_0', 'w': 1024, 'h': 1024, 'prompt': `cute first Christmas round ornament design isolated on a white background`},
-    {'id': '714afaed-00df-4ed7-9954-d2c7c5a1cba9/0_0', 'w': 1024, 'h': 1024, 'prompt': `Creative illustration,white`},
-    {'id': 'db0ff1d0-60e2-4629-88e0-4d1977cff0c6/0_1', 'w': 1024, 'h': 1024, 'prompt': `Fashion boy raising hand one person pose whole body man`},
-    {'id': 'db0ff1d0-60e2-4629-88e0-4d1977cff0c6/0_0', 'w': 1024, 'h': 1024, 'prompt': `Fashion boy raising hand one person pose whole body man`},
-    {'id': '23175e87-2fe4-428a-8c57-df791d2a06d5/0_1', 'w': 1024, 'h': 1024, 'prompt': `stairs in the style of art in the style of Louise McNaught`},
-    {'id': '23175e87-2fe4-428a-8c57-df791d2a06d5/0_0', 'w': 1024, 'h': 1024, 'prompt': `stairs in the style of art in the style of Louise McNaught`},
-    {'id': '5db0c527-b6ad-4eeb-a315-c06a5d24dfff/0_1', 'w': 1024, 'h': 1024, 'prompt': `Mythical form`},
-    {'id': 'dce881ce-6c70-4212-9abe-d2d10df0ed96/0_1', 'w': 1024, 'h': 1024, 'prompt': `red hocus pocus themed gucci purse`},
-    {'id': 'f3903fd4-9695-4799-a6a1-b32426fea541/0_1', 'w': 1024, 'h': 1024, 'prompt': `skier in the style of art in the style of Antoine Blanchard`},
-    {'id': 'f29944eb-78bb-4bbf-aae7-2a562d9da967/0_1', 'w': 1024, 'h': 1024, 'prompt': `A copper clothing store designed by Eero Saarinen`},
-    {'id': '47599011-6432-437b-a29b-d5c23b6d329a/0_1', 'w': 1024, 'h': 1024, 'prompt': `llustration A fresh grape Mountains and sunshine in the background There are vines in the foreground leafage`},
-    {'id': 'a6403cf6-22a4-47d2-8cf1-1152ddbbe642/0_0', 'w': 1024, 'h': 1024, 'prompt': `milk texture, view top`},    
-    {'id': 'c1e58286-74d5-4eb9-992a-3f92456898f7/0_0', 'w': 816, 'h': 1456, 'prompt': `iceland in the style of art in the style of Paolo Roversi`},
-    {'id': '857ecb8c-11e6-4520-961d-64eaf57fa7ff/0_0', 'w': 896, 'h': 1344, 'prompt': `hedgehog in the style of art in the style of Chesley Bonestell`},
-    {'id': '3187379f-560e-4672-af23-c067758d31ec/0_0', 'w': 1456, 'h': 816, 'prompt': `yak in the style of art in the style of Ernest Zacharevic`},
-    {'id': 'a0cf3e6b-9a2e-40c5-91c2-e5f8fc753102/0_1', 'w': 1024, 'h': 1024, 'prompt': `pattern on a silk scarf`},
-    {'id': '99cdd1fe-c78f-4acb-9542-8ecb0a7fa1de/0_0', 'w': 1024, 'h': 1024, 'prompt': `cute fox batman, pixar style`},
-    {'id': 'abf43e0b-0509-440b-8909-bdb1e9db2028/0_1', 'w': 1456, 'h': 816, 'prompt': `Cartoon anime flat style, little girl playing with small animals in the forest`},
-    {'id': '3f0e91c9-d241-4687-91ea-bee31a7a23a1/0_1', 'w': 1024, 'h': 1024, 'prompt': `tree river tornado turtle`},
-    {'id': '3f0e91c9-d241-4687-91ea-bee31a7a23a1/0_0', 'w': 1024, 'h': 1024, 'prompt': `tree river tornado turtle`},
-    {'id': '172e5847-46d6-4ae1-9b77-e9ce8d70d513/0_1', 'w': 1024, 'h': 1024, 'prompt': `a hamster holding a wooden carved heart`},
-    {'id': '172e5847-46d6-4ae1-9b77-e9ce8d70d513/0_0', 'w': 1024, 'h': 1024, 'prompt': `a hamster holding a wooden carved heart`},
-    {'id': 'fdafad7d-faee-483f-9a85-ffda71099c27/0_1', 'w': 1024, 'h': 1024, 'prompt': `nightclub in the style of art in the style of Robert Colquhoun`},
-    {'id': '8cbf540a-9a9e-4274-9c4c-fecad23972fd/0_1', 'w': 816, 'h': 1456, 'prompt': `a project of architecture on a living bridge with housing and offices`},
-    {'id': 'ae671703-39d1-436b-bb30-1cd6208b10b2/0_1', 'w': 896, 'h': 1344, 'prompt': `post apocalyptic knives`},
-    {'id': 'ae671703-39d1-436b-bb30-1cd6208b10b2/0_0', 'w': 896, 'h': 1344, 'prompt': `post apocalyptic knives`},
-    {'id': '5b9cf58b-7e7c-40d2-a05c-51f0b66d199f/0_1', 'w': 1456, 'h': 816, 'prompt': `animated moses as florida man`},
-    {'id': 'c3a8313e-ffbd-4fae-8e9b-68841380208a/0_1', 'w': 1456, 'h': 816, 'prompt': `Alexandria Ocasio-Cortez as arwen from Lord of the rings`},
-    {'id': '7d4fee94-c7aa-4022-a4d7-e4096ad8a45d/0_0', 'w': 1456, 'h': 816, 'prompt': `average 4wierd discord call`},
-    {'id': '591f548c-91bc-4f6a-a916-21f3ce713d63/0_1', 'w': 1024, 'h': 1024, 'prompt': `the war of army of mecha fighter robots with yellow color accent`},
-    {'id': '5d239e6b-5a47-4edf-bca1-63e1533ac2c6/0_1', 'w': 1024, 'h': 1024, 'prompt': `diagrammatic drawing of Kenny G playing saxophone in space`},
-    {'id': 'ec69e13f-a5c8-47a3-91c3-1b043249d4a2/0_0', 'w': 1344, 'h': 896, 'prompt': `doctor in the style of art in the style of Pez`},
-    {'id': '532b02ec-6c77-4461-b96e-35ab7a96786c/0_0', 'w': 1024, 'h': 1024, 'prompt': `serenity in the style of art in the style of Ties Ten Bosch`},
-    {'id': '1d1ef0b1-78df-4401-bb8c-0a51dff42c9c/0_0', 'w': 1024, 'h': 1024, 'prompt': `chibi Loch Ness monster`},
-    {'id': 'e42d0a84-12fa-4011-9aee-f7ae90868ed0/0_1', 'w': 1024, 'h': 1024, 'prompt': `opossum in the style of art in the style of Alex Yanes`},
-    {'id': 'e42d0a84-12fa-4011-9aee-f7ae90868ed0/0_0', 'w': 1024, 'h': 1024, 'prompt': `opossum in the style of art in the style of Alex Yanes`},
-    {'id': '878fbc3a-8421-4c80-99e9-2bc4cc5e12cd/0_0', 'w': 1024, 'h': 1024, 'prompt': `mechanic in the style of art in the style of Eleanor Fortescue-Brickdale`},
-    {'id': '6dec763a-4429-4ba5-8829-559a9a897cfa/0_0', 'w': 1024, 'h': 1024, 'prompt': `the best ending of game of thrones`},
-    {'id': '3fd1b85c-d0e5-4fc5-a71e-5dd07f11ff03/0_0', 'w': 896, 'h': 1344, 'prompt': `mantis in the style of art in the style of Lomography Redscale XR 50-200`},
-    {'id': '3fd1b85c-d0e5-4fc5-a71e-5dd07f11ff03/0_1', 'w': 896, 'h': 1344, 'prompt': `mantis in the style of art in the style of Lomography Redscale XR 50-200`},
-    {'id': '1035291c-9564-4d4f-99a9-a766a11e1305/0_1', 'w': 1024, 'h': 1024, 'prompt': `ruins in the style of art in the style of Dean Cornwell`},
-    {'id': '490a48bd-6d6d-441b-b490-5ea2278d805e/0_1', 'w': 1024, 'h': 1024, 'prompt': `sea creatures, fish and octopuss flying in a urban forest landscape`},
-    {'id': '6c5fa373-42ca-411e-b63c-a0aa16f8da6f/0_0', 'w': 1024, 'h': 1024, 'prompt': `simple abstract mid century modern pattern`},
-    {'id': '6c5fa373-42ca-411e-b63c-a0aa16f8da6f/0_1', 'w': 1024, 'h': 1024, 'prompt': `simple abstract mid century modern pattern`},
-    {'id': '54501fa6-b1ec-4d8a-baca-3108f45d137e/0_1', 'w': 1024, 'h': 1024, 'prompt': `cave in the style of art in the style of Charles Samuel Addams`},
-    {'id': 'fa17111c-cbf4-4247-8149-b150c51c3a88/0_1', 'w': 1456, 'h': 816, 'prompt': `man stangin in front of a big mountain. gazing upwards`},
-    {'id': '5a2daf2f-e691-48fa-ad4c-b4f5afa66b5a/0_0', 'w': 1024, 'h': 1024, 'prompt': `Paul Young watching his playhouse get torn down`},
-    {'id': '5a2daf2f-e691-48fa-ad4c-b4f5afa66b5a/0_1', 'w': 1024, 'h': 1024, 'prompt': `Paul Young watching his playhouse get torn down`},
-    {'id': 'c354b0a8-95fd-4149-bd50-a3f08c7f9285/0_1', 'w': 1024, 'h': 1024, 'prompt': `swordsman handdrawn portrait on ancient paper with a handwritten name Sildar`},
-    {'id': 'c354b0a8-95fd-4149-bd50-a3f08c7f9285/0_0', 'w': 1024, 'h': 1024, 'prompt': `swordsman handdrawn portrait on ancient paper with a handwritten name Sildar`},
-    {'id': 'b014489b-67af-46b9-a07b-9f12cf1c9294/0_0', 'w': 1024, 'h': 1024, 'prompt': `thanks little man, want some drugs? Syringe`},
-    {'id': 'c64dd44a-438f-4637-ba1b-9fe4c22b0f03/0_0', 'w': 1024, 'h': 1024, 'prompt': `a simlpified line art drawing of a duck for a logo`},
-    {'id': 'e1650658-40fd-47aa-9433-4050435b35ab/0_1', 'w': 816, 'h': 1456, 'prompt': `dwarf in a janitors uniform by a highschool`},
-    {'id': 'e1650658-40fd-47aa-9433-4050435b35ab/0_0', 'w': 816, 'h': 1456, 'prompt': `dwarf in a janitors uniform by a highschool`},
-    {'id': '02695d68-7235-40af-94cc-ed286b056a9d/0_0', 'w': 1024, 'h': 1024, 'prompt': `a lonely person in the infinite universe`},
-    {'id': '64637223-74c6-4c7b-8572-0aa6e9b8db9e/0_1', 'w': 1024, 'h': 1024, 'prompt': `business card design orange and black and white`},
-    {'id': '481a65f9-0826-4c0d-b845-9be74dee2246/0_1', 'w': 1024, 'h': 1024, 'prompt': `Sketched image of a heart character with a smiling face, in black and white`},
-    {'id': '481a65f9-0826-4c0d-b845-9be74dee2246/0_0', 'w': 1024, 'h': 1024, 'prompt': `Sketched image of a heart character with a smiling face, in black and white`},
-    {'id': '0684535f-3a04-4f05-aca6-dfff4b4a7982/0_1', 'w': 1456, 'h': 816, 'prompt': `young catholic priest celebrating mass abstract style`},
-    {'id': '0684535f-3a04-4f05-aca6-dfff4b4a7982/0_0', 'w': 1456, 'h': 816, 'prompt': `young catholic priest celebrating mass abstract style`},
-    {'id': '9c74abf9-b27c-4ccb-ad23-d3e0e061d197/0_0', 'w': 1024, 'h': 1024, 'prompt': `A city with towering golden, domed roofs nestled amongst lush green trees on the side of a mountain. Painted in the style of Yoji Shinkawa sumi-e with water colors with a white background`},
-    {'id': '1646c800-26f2-49e4-8dd0-72e5bffff6a7/0_0', 'w': 896, 'h': 1344, 'prompt': `whale in the style of art in the style of Guy Bourdin`},
-    {'id': 'da7d3d71-2629-47c9-8179-68e929a2d490/0_1', 'w': 1024, 'h': 1024, 'prompt': `Danny Breckenridge sitting on a bench`},
-    {'id': '629a2c0e-e421-4302-b6e9-2806feb52a91/0_0', 'w': 1456, 'h': 816, 'prompt': `Dame Hesther Lajoie in the style of Caravaggio`},
-    {'id': 'f6957ea8-282a-4f0b-96d4-6131e4757243/0_1', 'w': 1024, 'h': 1024, 'prompt': `Oktoberfest poster with beer and bbq`},
-    {'id': '4f5e413a-d668-46ab-bea0-9d9545be1450/0_1', 'w': 1024, 'h': 1024, 'prompt': `portrait of a creepy boy named Damian`},
-    {'id': '8652448d-3809-4e25-b417-d702c882272b/0_1', 'w': 1024, 'h': 1024, 'prompt': `swim balloon ring minimalistic 3d asset top view`},
-    {'id': 'a213e1a9-b373-475b-9a21-1802b3c8fd44/0_0', 'w': 896, 'h': 1344, 'prompt': `storm in the style of art in the style of Suzanne Valadon`},
-    {'id': 'f116aadb-9c76-47f2-bd80-032efdf2fc89/0_1', 'w': 1024, 'h': 1024, 'prompt': `raccoon in the style of art in the style of George Frederic Watts`},
-    {'id': 'f116aadb-9c76-47f2-bd80-032efdf2fc89/0_0', 'w': 1024, 'h': 1024, 'prompt': `raccoon in the style of art in the style of George Frederic Watts`},
-    {'id': '9a5f474f-56d9-4136-8915-704cb6847ffd/0_1', 'w': 816, 'h': 1456, 'prompt': `vector illustration of vintage happy cute mom mummy`},
-    {'id': '362b128e-e8e7-4f64-98ee-9e456a871681/0_1', 'w': 816, 'h': 1456, 'prompt': `Asian scruffy male profile`},
-    {'id': '01afeaf6-0bea-449e-9702-c7de9ab711a6/0_1', 'w': 1024, 'h': 1024, 'prompt': `amazon scout in the style of hyeronimus bosch`},
-    {'id': '01afeaf6-0bea-449e-9702-c7de9ab711a6/0_0', 'w': 1024, 'h': 1024, 'prompt': `amazon scout in the style of hyeronimus bosch`},
-    {'id': '71085649-bdeb-4375-bed8-cf5d6d4996f9/0_0', 'w': 896, 'h': 1344, 'prompt': `proffesional landing page design for company selling digital cameras, red accent color on a white background, modern and unique wordpress theme`},
-    {'id': 'a4d755e9-60b4-49b0-8578-5462f70f8d8a/0_1', 'w': 1024, 'h': 1024, 'prompt': `da vinci sketch of pedro de valdivia`},
-    {'id': '5a8a417d-34c7-466c-b67f-e7885dc66196/0_1', 'w': 1024, 'h': 1024, 'prompt': `sokudo Kai`},
-    {'id': '1632ccd5-6c26-400c-9bb9-3d5c3226d042/0_0', 'w': 1344, 'h': 896, 'prompt': `old man looking at a pigeon and finding it attractive`},
-    {'id': '1886339c-cce7-450e-8f52-0749fc4b81d2/0_1', 'w': 1024, 'h': 1024, 'prompt': `Eggplant rolls with tomato`},
-    {'id': '6caa3302-8fc4-4098-b993-607542dafe46/0_0', 'w': 1024, 'h': 1024, 'prompt': `ram dressed in a business suit and looking at the camera - isolated on white, photo`},
-    {'id': '2e22977a-626e-4f24-be56-8ce852e9d73f/0_0', 'w': 1344, 'h': 896, 'prompt': `winter, Arctic Village Section of the Great Wall, Pure white snow and sea of clouds complement each other`},
-    {'id': '2e22977a-626e-4f24-be56-8ce852e9d73f/0_1', 'w': 1344, 'h': 896, 'prompt': `winter, Arctic Village Section of the Great Wall, Pure white snow and sea of clouds complement each other`},
-    {'id': '6a2e7450-cdf3-48c7-b49d-2f0de5a7c065/0_1', 'w': 1024, 'h': 1024, 'prompt': `curtains in the style of art in the style of Charles-François Daubigny`},
-    {'id': '10f52ebc-b8f0-4c9c-af6c-b6f822c1e6a7/0_1', 'w': 1024, 'h': 1024, 'prompt': `Russian singer Valery Leontyev`},
-    {'id': 'de6dcdc8-d862-4779-bcdb-aee44d69230c/0_0', 'w': 1024, 'h': 1024, 'prompt': `isometric demon bat bot`},
-    {'id': 'f90e9568-1d08-4b68-9ed5-88d7ec0b9348/0_1', 'w': 1024, 'h': 1024, 'prompt': `Chinese girl, playing iron flower`},
-    {'id': '513cf6e9-9c76-4024-ab98-f56d2556c872/0_1', 'w': 1024, 'h': 1024, 'prompt': `crochet, seamless pattern, dreamcore style`},
-    {'id': 'a2ba4663-81a7-4926-bf0b-785c8567492f/0_1', 'w': 1024, 'h': 1024, 'prompt': `nature in the style of art in the style of Antanas Sutkus`},
-    {'id': '4c2714a5-d43f-451a-b563-6f32077fa4e3/0_1', 'w': 1024, 'h': 1024, 'prompt': `void in the style of art in the style of Beryl Cook`},
-    {'id': '8839b058-55dd-4be8-85e8-dc31fe39b522/0_0', 'w': 1024, 'h': 1024, 'prompt': `simple serene sacred orbits crescent moon mandala, black-and-white coloring book page, white background`},
-    {'id': 'c11e35d8-5e48-4a38-a99f-b3eaee903175/0_0', 'w': 1024, 'h': 1024, 'prompt': `a baby otter smiling next to a log cabin in the mountain woods`},
-    {'id': '06260586-d3c5-40a0-9098-1652273d1c92/0_1', 'w': 1024, 'h': 1024, 'prompt': `elon musk at an automat in Japan`},
-    {'id': 'dfb2c694-d9d7-4783-a462-28ab918dcb78/0_1', 'w': 1344, 'h': 896, 'prompt': `background money 3d`},
-    {'id': 'dfb2c694-d9d7-4783-a462-28ab918dcb78/0_0', 'w': 1344, 'h': 896, 'prompt': `background money 3d`},
-    {'id': 'cc4b86cf-e5ea-4e7b-95b0-3dffde0f889a/0_1', 'w': 1456, 'h': 816, 'prompt': `kawaii panda in vector Black and white style doing 10 Yoga different poses`},
-    {'id': '536bab97-449e-4c55-8a52-049b9bd849a9/0_1', 'w': 1024, 'h': 1024, 'prompt': `Javier bardem as the villain Ganondorf from the Nintendo video game the legend of Zelda with short hair`},
-    {'id': 'bb13a791-f06e-444e-b964-128ea9d7ef84/0_0', 'w': 896, 'h': 1344, 'prompt': `skateboard in the style of art in the style of Lynette Yiadom-Boakye`},
-    {'id': 'bb13a791-f06e-444e-b964-128ea9d7ef84/0_1', 'w': 896, 'h': 1344, 'prompt': `skateboard in the style of art in the style of Lynette Yiadom-Boakye`},
-    {'id': 'a4fc12cf-7a52-4ef8-811c-edc4b1b753e9/0_0', 'w': 1024, 'h': 1024, 'prompt': `female community college math instructor named Sara trying to figure out how Legos work`},
-    {'id': '03d00f9e-f394-4041-b36a-e85acd9d2fe2/0_1', 'w': 1456, 'h': 816, 'prompt': `gir invader zim robot saluting`},
-    {'id': '3f1947bd-5501-4114-adf7-4fa736d832f3/0_0', 'w': 1024, 'h': 1024, 'prompt': `hibiscus in the style of art in the style of Fan Ho`},
-    {'id': '3f1947bd-5501-4114-adf7-4fa736d832f3/0_1', 'w': 1024, 'h': 1024, 'prompt': `hibiscus in the style of art in the style of Fan Ho`},
-    {'id': '3e0e34c2-ffa8-4f4e-bd02-584e72cfd5da/0_1', 'w': 1024, 'h': 1024, 'prompt': `someone in madagascar looking at the stars at night time`},
-    {'id': 'c051448f-281c-4c17-a19e-0014fe220466/0_0', 'w': 816, 'h': 1456, 'prompt': `gourmet sushi professional plating and photography`},
-    {'id': 'fb341b2d-bbd8-4834-a938-9f411c8caa40/0_0', 'w': 1024, 'h': 1024, 'prompt': `buttefly moth, purple, girl with face piercings`},
-    {'id': 'fb341b2d-bbd8-4834-a938-9f411c8caa40/0_1', 'w': 1024, 'h': 1024, 'prompt': `buttefly moth, purple, girl with face piercings`},
-    {'id': '800a7af3-82a0-4798-9ca3-8c973d62c8b3/0_1', 'w': 1024, 'h': 1024, 'prompt': `baby sailor Mercury`},
-    {'id': '8063b46e-9f25-4ce4-9d62-f443fa11d2f1/0_0', 'w': 1024, 'h': 1024, 'prompt': `flying spacecraft, crystalcore`},
-    {'id': '0297c25f-ccd4-4b61-9f3a-22cf6c7a94c4/0_0', 'w': 1024, 'h': 1024, 'prompt': `A flock of cranes flying among the flowers`},
-    {'id': 'cabcac1b-e24f-422d-bf94-db37f631d22d/0_0', 'w': 1024, 'h': 1024, 'prompt': `demon hunter, 2 cats on the side`},
-    {'id': '291e08d7-fb13-49fa-a26d-35eb957be9e3/0_1', 'w': 1024, 'h': 1024, 'prompt': `cowboy in the style of art in the style of Wang Yuan`},
-    {'id': 'a7c87a62-3140-4244-8c54-048852f30e8b/0_1', 'w': 1024, 'h': 1024, 'prompt': `lion in the style of art in the style of Jeremy Geddes`},
-    {'id': '3254a0bb-78d7-4d2f-9885-85f21b140a18/0_1', 'w': 1024, 'h': 1024, 'prompt': `tattoo surrealism cubism`},
-    {'id': '3254a0bb-78d7-4d2f-9885-85f21b140a18/0_0', 'w': 1024, 'h': 1024, 'prompt': `tattoo surrealism cubism`},
-    {'id': 'c6c29177-89f0-4779-ae87-59c66a866574/0_0', 'w': 1024, 'h': 1024, 'prompt': `etched style illustrated skulls, black and white`},
-    {'id': 'c6c29177-89f0-4779-ae87-59c66a866574/0_1', 'w': 1024, 'h': 1024, 'prompt': `etched style illustrated skulls, black and white`},
-    {'id': '75caf171-a17e-4b6f-9fa7-4ea25bdea41a/0_1', 'w': 1456, 'h': 816, 'prompt': `men erecting tilted 3d american map upright by rope on a desert`},
-    {'id': '383bd33c-d8af-49d7-b075-2e5bb4685664/0_1', 'w': 1456, 'h': 816, 'prompt': `giant world tree showing simultaneously the 4 seasons spring autumn summer winter reaching the heavens`},
-    {'id': '91001db9-624e-4042-bbe8-defd7a4e2ed2/0_0', 'w': 1456, 'h': 816, 'prompt': `Mermaid swimming with a sea turtle, blue sea, neon lights`},
-    {'id': '91001db9-624e-4042-bbe8-defd7a4e2ed2/0_1', 'w': 1456, 'h': 816, 'prompt': `Mermaid swimming with a sea turtle, blue sea, neon lights`},
-    {'id': '351e6c8f-c468-400a-bf1a-f8ac0c82cd57/0_1', 'w': 1024, 'h': 1024, 'prompt': `summer forest, unique features`},
-    {'id': '351e6c8f-c468-400a-bf1a-f8ac0c82cd57/0_0', 'w': 1024, 'h': 1024, 'prompt': `summer forest, unique features`},
-    {'id': 'd4015f87-0fdc-4724-99df-5923d09eb0ba/0_0', 'w': 1024, 'h': 1024, 'prompt': `lone guitar player making cookies with a ghost`},
-    {'id': 'd4015f87-0fdc-4724-99df-5923d09eb0ba/0_1', 'w': 1024, 'h': 1024, 'prompt': `lone guitar player making cookies with a ghost`},
-    {'id': '5caa2f46-cdd9-41fc-a581-ff45751ce8c8/0_0', 'w': 1024, 'h': 1024, 'prompt': `dalai lama is harry potter`},
-    {'id': '5caa2f46-cdd9-41fc-a581-ff45751ce8c8/0_1', 'w': 1024, 'h': 1024, 'prompt': `dalai lama is harry potter`},
-    {'id': '5b9d5a81-0877-4332-be3d-a2d70185dd56/0_0', 'w': 1024, 'h': 1024, 'prompt': `pixar turtle on the beach with a lighthouse in the background`},
-    {'id': '5b9d5a81-0877-4332-be3d-a2d70185dd56/0_1', 'w': 1024, 'h': 1024, 'prompt': `pixar turtle on the beach with a lighthouse in the background`},
-    {'id': '04f69b77-3a5b-4864-8df2-b77663c79518/0_0', 'w': 1024, 'h': 1024, 'prompt': `city at midnight, with lavender garden`},
-    {'id': '882dc0ba-0ba7-4a33-b88d-849c1650856e/0_0', 'w': 1024, 'h': 1024, 'prompt': `elf child boy blond with blue eyes in a magic glitter nature fotest`},
-    {'id': 'c0e6608f-6aab-4b57-b587-0baedde9f184/0_1', 'w': 1024, 'h': 1024, 'prompt': `houseplant template for social media`},
-    {'id': 'c0e6608f-6aab-4b57-b587-0baedde9f184/0_0', 'w': 1024, 'h': 1024, 'prompt': `houseplant template for social media`},
-    {'id': 'c18299a1-7d9f-4263-9b22-5b6f6d9a8fdd/0_1', 'w': 1024, 'h': 1024, 'prompt': `Japanese Samurai in a Shrek Ironman suit`},
-    {'id': 'c18299a1-7d9f-4263-9b22-5b6f6d9a8fdd/0_0', 'w': 1024, 'h': 1024, 'prompt': `Japanese Samurai in a Shrek Ironman suit`},
-    {'id': '6229e93a-5251-4af5-bfbb-ea23d4e6c82d/0_1', 'w': 1024, 'h': 1024, 'prompt': `Denis Makarov`},
-    {'id': '0b9d5574-9aac-4493-ad47-1c5b94343b41/0_0', 'w': 1456, 'h': 816, 'prompt': `water colour line art of haunted village in a forest at night`},
-    {'id': '221de2e4-36f4-4f85-a148-b6f0c293b1fb/0_0', 'w': 1024, 'h': 1024, 'prompt': `basketball in the style of art in the style of Justin Gerard`},
-    {'id': '670b26de-c02f-437a-bd87-f9bdeaa5fbcc/0_0', 'w': 1024, 'h': 1024, 'prompt': `retro plumbing logo, red text, blue water`},
-    {'id': 'ac3c33a7-cbed-4426-8db9-aeca5799e1eb/0_0', 'w': 1024, 'h': 1024, 'prompt': `pyramids in the style of art in the style of Walter Richard Sickert`},
-    {'id': 'a9da8715-b0d9-434a-bea9-b3df95151729/0_1', 'w': 816, 'h': 1456, 'prompt': `sopron fire tower cyberpunk style`},
-    {'id': '69adbc2c-31cc-4746-b83a-8c80f0f4447b/0_0', 'w': 1024, 'h': 1024, 'prompt': `hummingbird in the style of art in the style of Martha Wenzel`},
-    {'id': '19194539-aee9-4704-8a02-a1c1433a6c9f/0_0', 'w': 1024, 'h': 1024, 'prompt': `In the water festival a long hair flowing oriental cartoon girl washing her hair, next to a group of happy girls with water pots splashing water, behind a mountain and water and a bottle of shampoo3d`},
-    {'id': '24686ab0-0b9a-4c9b-8b70-c37d60848ba3/0_1', 'w': 1024, 'h': 1024, 'prompt': `pope francis with the Moncler brand jacket, ultra realistyc`},
-    {'id': '7a3a42bb-61ef-40cd-a635-92c97d1166c0/0_1', 'w': 1024, 'h': 1024, 'prompt': `white background, african american woman, younger self and adult self`},
-    {'id': 'b03b3f20-f87b-458b-92ee-a4ae3d5f1947/0_0', 'w': 1456, 'h': 816, 'prompt': `bitcoin coins in on a plate in a bar`},
-    {'id': 'fbdca57a-1814-4247-a9ae-28c67ae4df3f/0_0', 'w': 1456, 'h': 816, 'prompt': `cozy fireplace, colorful flame, minimalistic round logo design`},
-    {'id': '68b530d8-da6b-43ab-804e-552c18eb8904/0_1', 'w': 1024, 'h': 1024, 'prompt': `frog in the style of art in the style of Jason Freeny`},
-    {'id': '295b5f80-ef36-46ff-8084-f8c4fcafd239/0_0', 'w': 1024, 'h': 1024, 'prompt': `Green ice dragon, mystical, fantasy`},
-    {'id': '31b5ceb0-b8bc-464f-ab76-aa604b1d29c9/0_1', 'w': 1024, 'h': 1024, 'prompt': `ufo in the style of art in the style of Thierry Noir`},
-    {'id': '31b5ceb0-b8bc-464f-ab76-aa604b1d29c9/0_0', 'w': 1024, 'h': 1024, 'prompt': `ufo in the style of art in the style of Thierry Noir`},
-    {'id': 'efad2c76-6186-416b-a828-ee431e5118bf/0_0', 'w': 1344, 'h': 896, 'prompt': `The gut microbiome is a key lever on human health, black background, blue tint`},
-    {'id': '6e051976-b680-437c-b12e-423de4b7594c/0_0', 'w': 1024, 'h': 1024, 'prompt': `a tshirt design of a poodle`},
-    {'id': '57467c60-ec1f-44c5-92a4-3454acdcbd34/0_0', 'w': 1024, 'h': 1024, 'prompt': `a silloutte of a raven on a branch, black and white`},
-    {'id': 'bb18e728-2220-43c6-ad66-9544f9c0e5fc/0_1', 'w': 1024, 'h': 1024, 'prompt': `fire in the style of art in the style of James Gilleard`},
-    {'id': '0da74114-c5db-4f4d-a16f-65d88453474b/0_0', 'w': 1024, 'h': 1024, 'prompt': `beetle in the style of art in the style of Adrian Ghenie`},
-    {'id': '0da74114-c5db-4f4d-a16f-65d88453474b/0_1', 'w': 1024, 'h': 1024, 'prompt': `beetle in the style of art in the style of Adrian Ghenie`},
-    {'id': 'cd62f75d-44f7-4ea4-a6be-9aef48eb3429/0_0', 'w': 1024, 'h': 1024, 'prompt': `cemeleon snake camo`},
-    {'id': '7748490e-3dca-40f3-9083-d2578640e77d/0_0', 'w': 816, 'h': 1456, 'prompt': `the god of trade walking through a storm of white and black`},
-    {'id': '8075c7d4-93a4-46cd-9170-e7f5c2d275cd/0_1', 'w': 1024, 'h': 1024, 'prompt': `A small thin grass snake with two symmetrical yellow circles on its forehead and two yellow eyes`},
-    {'id': '8075c7d4-93a4-46cd-9170-e7f5c2d275cd/0_0', 'w': 1024, 'h': 1024, 'prompt': `A small thin grass snake with two symmetrical yellow circles on its forehead and two yellow eyes`},
-    {'id': '90a1bff6-976d-4faa-8204-2bb89d7b60b5/0_0', 'w': 896, 'h': 1344, 'prompt': `the Tex Avery wolf with the exorbitant eyes falls in love with the singer on stage.`},
-    {'id': '4db8ec19-0e6f-4256-a6ca-39b212a31efc/0_1', 'w': 1024, 'h': 1024, 'prompt': `aerial view of gothic theme park`},
-    {'id': '12d01dc0-5945-4fb4-bcec-9413fa5833d8/0_0', 'w': 1024, 'h': 1024, 'prompt': `linocut sticker tattoo`},
-    {'id': '12d01dc0-5945-4fb4-bcec-9413fa5833d8/0_1', 'w': 1024, 'h': 1024, 'prompt': `linocut sticker tattoo`},
-    {'id': 'b3bb3a4c-ae59-4a85-8754-76ad4ae6fbce/0_1', 'w': 1024, 'h': 1024, 'prompt': `an image from the waist up of an friendly and warm looking 42-year-old latin female professional concerned about the environment and is the mother of 3 and who is being photographed in a studio against a light gray backdrop for an annual report, lighting from the front from a ring light, in the style of Fuji professional color film`},
-    {'id': 'b3bb3a4c-ae59-4a85-8754-76ad4ae6fbce/0_0', 'w': 1024, 'h': 1024, 'prompt': `an image from the waist up of an friendly and warm looking 42-year-old latin female professional concerned about the environment and is the mother of 3 and who is being photographed in a studio against a light gray backdrop for an annual report, lighting from the front from a ring light, in the style of Fuji professional color film`},
-    {'id': 'bba77df8-0231-4275-96d8-32b86c29833b/0_0', 'w': 1456, 'h': 816, 'prompt': `A slightly overweight guy with short hair and brown eyes is holding paper money in his hands against the background of a school canteen., art illustration style`},
-    {'id': 'd2d596fd-c8e9-4d2c-9df5-a69ab40e5860/0_0', 'w': 1024, 'h': 1024, 'prompt': `psychedelic teletubbies by daniel clowes, Allen Ginsburg and masao Yamamoto`},
-    {'id': '25c83b67-9a95-4b79-8a11-72c1f4ff5320/0_0', 'w': 1024, 'h': 1024, 'prompt': `island in the style of art in the style of Thomas Eakins`},
-    {'id': '826db392-68ee-44b7-93b2-eeea24f2b37b/0_0', 'w': 1344, 'h': 896, 'prompt': `Kool aid man is broken`},
-    {'id': '7d7feafb-246b-40c9-80ef-c60951aee978/0_0', 'w': 1024, 'h': 1024, 'prompt': `cupcake in the style of art in the style of Jan Schoonhoven`},
-    {'id': '533ae8b1-c0d3-48c3-b712-1e90dd057e41/0_0', 'w': 1024, 'h': 1024, 'prompt': `Paint Drying`},
-    {'id': 'b849cb60-ba98-4b28-99bb-75f2bf6eeb5f/0_1', 'w': 1024, 'h': 1024, 'prompt': `create 256x256 image of red background`},
-    {'id': 'b849cb60-ba98-4b28-99bb-75f2bf6eeb5f/0_0', 'w': 1024, 'h': 1024, 'prompt': `create 256x256 image of red background`},
-    {'id': '2ecaf67c-371d-4613-a6a5-fe2d442a35b1/0_0', 'w': 816, 'h': 1456, 'prompt': `postman in the style of art in the style of Hiro Mashima`},
-    {'id': '2ecaf67c-371d-4613-a6a5-fe2d442a35b1/0_1', 'w': 816, 'h': 1456, 'prompt': `postman in the style of art in the style of Hiro Mashima`},
-    {'id': '0b684e42-958f-4c18-9e6d-01afbb51b829/0_0', 'w': 816, 'h': 1456, 'prompt': `A girl with a kite, standing on a beach with the waves crashing against the shore.`},
-    {'id': 'd60436c7-32c3-4568-83fe-cf425e7e5b07/0_0', 'w': 1024, 'h': 1024, 'prompt': `amoled phone wallpaper`},
-    {'id': '3dc5b287-bc6c-44ad-8a15-633ecb7c188c/0_1', 'w': 896, 'h': 1344, 'prompt': `a river made of hearts, black and gold, colorful sky made of wisps`},
-    {'id': 'e005ecb6-9665-4b84-9c65-60883837fdf6/0_1', 'w': 1024, 'h': 1024, 'prompt': `chip in the style of art in the style of Hans Hartung`},
-    {'id': '8ac07261-58a0-44b6-932d-0c261ec54884/0_0', 'w': 1456, 'h': 816, 'prompt': `cute kawai illustration puppy sitting in donut box`},
-    {'id': '5af1591f-2e2e-4520-bc94-72253dd6853b/0_0', 'w': 1024, 'h': 1024, 'prompt': `building with ""ankare"" on neon in cyberpunk style`},
-    {'id': 'fbfcb287-f738-4f7d-817a-12675b94ea2c/0_1', 'w': 1344, 'h': 896, 'prompt': `what a clerk looks like`},
-    {'id': 'fbfcb287-f738-4f7d-817a-12675b94ea2c/0_0', 'w': 1344, 'h': 896, 'prompt': `what a clerk looks like`},
-    {'id': '4c57ea44-a1ad-4b04-a590-306a82d89f26/0_1', 'w': 896, 'h': 1344, 'prompt': `the same as before, but as fantasy card for board game`},
-    {'id': '4c57ea44-a1ad-4b04-a590-306a82d89f26/0_0', 'w': 896, 'h': 1344, 'prompt': `the same as before, but as fantasy card for board game`},
-    {'id': '7b123160-d8e8-4e1b-aa8c-f59284064798/0_0', 'w': 1024, 'h': 1024, 'prompt': `sad monster anime`},
-    {'id': '45609e6c-389d-405e-ac7f-9cd572abb475/0_1', 'w': 1024, 'h': 1024, 'prompt': `logo of robed skeleton holding gold coins`},
-    {'id': 'c5e032a0-641d-4758-a345-0fbf26fe99cf/0_1', 'w': 1024, 'h': 1024, 'prompt': `waffles in the style of art in the style of Mati Klarwein`},
-    {'id': '02a1c003-f0cf-4be7-a02f-feb2b9213ed7/0_0', 'w': 1456, 'h': 816, 'prompt': `a chibi style quokka die cut sticker`},
-  ]
-// Variables to keep track of scrolling
-let lastScrollTop = 0;
-let currentScrollLeft = 0;
-let scrollSpeed = 0;
-const maxScale = 1.6; // Maximum scale for the image
-const scaleSpeedFactor = 0.05; // Factor to adjust the scaling speed effect
+      // Grabbing the HTML elements
+      const imageContainer = document.getElementById("imageContainer");
+      const modal = document.getElementById("myModal");
+      const modalImg = document.getElementById("modalImage");
+      const captionText = document.getElementById("caption");
 
-// Grabbing the HTML elements
-const imageContainer = document.getElementById('imageContainer');
-const modal = document.getElementById('myModal');
-const modalImg = document.getElementById('modalImage');
-const captionText = document.getElementById('caption');
+      // Function to create each image element
+      function createImageElement(imageData) {
+        const img = document.createElement("img");
+        img.src = `https://cdn.midjourney.com/${imageData.id}.webp`;
+        img.alt = imageData.prompt;
+        img.title = imageData.prompt; 
+        img.classList.add("image-item");        
+        img.onclick = () => openModal(img);
+        return img;
+      }
 
-// Function to create each image element
-function createImageElement(imageData) {
-  const img = document.createElement('img');
-  img.src = `https://cdn.midjourney.com/${imageData.id}.webp`;
-  img.alt = imageData.prompt;
-  img.classList.add('image-item'); // Add any additional styling classes if needed
-  return img;
-}
+      function initImages() {
+        data.forEach((imageData) => {
+          const imgElement = createImageElement(imageData);
+          imageContainer.appendChild(imgElement);
+        });
+      }
 
-// Initialize image elements and append to the container
-function initImages() {
-  data.forEach(imageData => {
-    const imgElement = createImageElement(imageData);
-    imageContainer.appendChild(imgElement);
-  });
-}
+      initImages();
 
-// Call this function to initialize images
-initImages();
+      function createScrollIndicators(numberOfIndicators) {
+        const indicatorsContainer = document.createElement("div");
+        indicatorsContainer.id = "indicatorsContainer";
 
-// Function to create scroll indicators
-function createScrollIndicators(numberOfIndicators) {
-  const indicatorsContainer = document.createElement('div');
-  indicatorsContainer.id = 'indicatorsContainer';
-  // Style adjustments to make sure the indicators are visible
-  indicatorsContainer.style.position = 'fixed';
-  indicatorsContainer.style.top = '20px'; // Positioned 20 pixels down from the top of the viewport
-  indicatorsContainer.style.left = '50%';
-  indicatorsContainer.style.transform = 'translateX(-50%)';
-  indicatorsContainer.style.display = 'flex';
-  indicatorsContainer.style.justifyContent = 'center';
-  indicatorsContainer.style.alignItems='center';
-  indicatorsContainer.style.zIndex = '1000'; // Above other elements
+        indicatorsContainer.style.position = "fixed";
+        indicatorsContainer.style.top = "20px"; // Positioned 20 pixels down from the top of the viewport
+        indicatorsContainer.style.left = "50%";
+        indicatorsContainer.style.transform = "translateX(-50%)";
+        indicatorsContainer.style.display = "flex";
+        indicatorsContainer.style.justifyContent = "center";
+        indicatorsContainer.style.alignItems = "center";
+        indicatorsContainer.style.zIndex = "1000"; // Above other elements
 
-  // Create the specified number of scroll line indicators
-  for (let i = 0; i < numberOfIndicators; i++) {
-    const line = document.createElement('div');
-    line.className = 'scroll-line';
-    line.style.background = 'white'; // Inactive color
-    line.style.width = '2px';
-    line.style.height = '20px'; // Inactive height
-    line.style.margin = '0 4px';
-    indicatorsContainer.appendChild(line);
-  }
+        // Create the specified number of scroll line indicators
+        for (let i = 0; i < numberOfIndicators; i++) {
+          const line = document.createElement("div");
+          line.className = "scroll-line";
+          line.style.background = "white"; // Inactive color
+          line.style.width = "2px";
+          line.style.height = "20px"; // Inactive height
+          line.style.margin = "0 4px";
+          indicatorsContainer.appendChild(line);
+        }
 
-  document.body.appendChild(indicatorsContainer); // Append the container to the body
-}
+        document.body.appendChild(indicatorsContainer); // Append the container to the body
+      }
 
+      function updateScrollIndicator() {
+        const maxScrollLeft =
+          imageContainer.scrollWidth - imageContainer.clientWidth;
+        const scrollFraction = imageContainer.scrollLeft / maxScrollLeft;
+        const lines = document.getElementsByClassName("scroll-line");
+        const activeIndex = Math.round(scrollFraction * (lines.length - 1));
 
-function updateScrollIndicator() {
-  const maxScrollLeft = imageContainer.scrollWidth - imageContainer.clientWidth;
-  const scrollFraction = imageContainer.scrollLeft / maxScrollLeft;
-  const lines = document.getElementsByClassName('scroll-line');
-  const activeIndex = Math.round(scrollFraction * (lines.length - 1));
+        Array.from(lines).forEach((line, index) => {
+          if (index === activeIndex) {
+            line.style.background = "orange";
+            line.style.height = "30px"; // Longer height for the active indicator
+          } else {
+            line.style.background = "white";
+            line.style.height = "20px"; // Default height
+          }
+        });
+      }
 
-  // Update each line's styling based on its index and the active index
-  Array.from(lines).forEach((line, index) => {
-    if (index === activeIndex) {
-      line.style.background = 'orange';
-      line.style.height = '30px'; // Longer height for the active indicator    
-    } else {
-      line.style.background = 'white';
-      line.style.height = '20px'; // Default height      
-    }
-  });
-}
+      let lastScrollTime = 0;
+      let lastScrollLeft = 0;
+      let isScrolling;
 
-// Select the scrollable container
-const scrollableContainer = document.querySelector('.scrollable-images');
+      function tiltImages() {
+        const currentScrollLeft = imageContainer.scrollLeft;
+        const currentScrollTime = Date.now();
+        const timeDifference = currentScrollTime - lastScrollTime;
+        const scrollDifference = currentScrollLeft - lastScrollLeft;
 
-scrollableContainer.addEventListener('scroll', function() {
-  // Clear the timeout if it has already been set.
-  // This will prevent the previous timeout from executing
-  // if the user starts scrolling again before the time limit has been reached.
-  clearTimeout(scrollableContainer.scrollTimeout);
+        scrollSpeed = Math.abs(scrollDifference / timeDifference);
+        const speedThreshold = 2; // Adjust this number based on desired sensitivity
 
-  let currentScrollLeft = scrollableContainer.scrollLeft;
-  let images = document.querySelectorAll('.scrollable-images img');
+        if (scrollSpeed > speedThreshold) {
+          const tiltAngle = Math.min(scrollSpeed * 100, maxTiltAngle); // Adjust the multiplier to control sensitivity
 
-  // This will clear all previously set classes
-  images.forEach((image) => {
-    image.classList.remove('tilt-left', 'tilt-right');
-  });
+          // Apply the tilt angle to images
+          const images = imageContainer.querySelectorAll("img");
+          images.forEach((img) => {
+            img.style.transform =
+              scrollDifference > 0
+                ? `perspective(500px) rotateY(${tiltAngle}deg)`
+                : `perspective(500px) rotateY(-${tiltAngle}deg)`;
+          });
+        } else {
+          // Reset any existing tilt if the speed is too low
+          const images = imageContainer.querySelectorAll("img");
+          images.forEach((img) => {
+            img.style.transform = "none";
+          });
+        }
+        lastScrollLeft = currentScrollLeft;
+        lastScrollTime = currentScrollTime;
+        isScrolling = false;
+      }
 
-  // Apply new classes based on scroll direction
-  images.forEach((image, index) => {
-    if (currentScrollLeft > lastScrollTop) {
-      // Scrolling to the right      
-        image.classList.add('tilt-right');      
-    } else {
-      // Scrolling to the left
-      
-        image.classList.add('tilt-left');
-      
-    }
-  });
+      imageContainer.addEventListener("scroll", () => {
+        if (!isScrolling) {
+          window.requestAnimationFrame(tiltImages);
+        }
+        isScrolling = true;
+      });
 
-  // Set a timeout to remove the tilt class after 500ms of inactivity
-  scrollableContainer.scrollTimeout = setTimeout(() => {
-    images.forEach((image) => {
-      image.classList.remove('tilt-left', 'tilt-right');
-    });
-  }, 50);
+      imageContainer.addEventListener("scroll", updateScrollIndicator);
+      document.addEventListener("DOMContentLoaded", () => {
+        createScrollIndicators(12);
+        updateScrollIndicator();
+        // Listen for wheel event on the window
+        window.addEventListener(
+          "wheel",
+          function (e) {
+            if (e.deltaY != 0) {
+              // Prevent the window from scrolling vertically
+              e.preventDefault();
+              // Scroll horizontally instead
+              imageContainer.scrollLeft += e.deltaY; // Adjust the multiplier as needed
+            }
+          },
+          { passive: false }
+        );
+      });
 
-  lastScrollTop = currentScrollLeft; // Update lastScrollTop to the new position
-});
+      // Rest of your existing JavaScript code...
 
+      document.addEventListener("keydown", function (event) {
+        if (modal.style.display === "block") {
+          // Only if the modal is open
+          if (event.key === "Escape") {
+            closeModal();
+          } else if (event.key === "ArrowRight") {
+            navigateModal("next");
+          } else if (event.key === "ArrowLeft") {
+            navigateModal("prev");
+          }
+        }
+      });
 
-// Event listener for scrolling on the image container
-imageContainer.addEventListener('scroll', updateScrollIndicator);
+      function navigateModal(direction) {
+        let currentIndex = data.findIndex(
+          (image) =>
+            `https://cdn.midjourney.com/${image.id}.webp` === modalImg.src
+        );
 
-// Create the scroll indicators after the DOM content is fully loaded
-document.addEventListener('DOMContentLoaded', () => {
-  createScrollIndicators(12); // Create 12 indicators
-  updateScrollIndicator(); // Set initial state
-});
+        if (direction === "next") {
+          currentIndex = (currentIndex + 1) % data.length;
+        } else if (direction === "prev") {
+          currentIndex = (currentIndex - 1 + data.length) % data.length;
+        }
 
+        const newImage = data[currentIndex];
+        modalImg.src = `https://cdn.midjourney.com/${newImage.id}.webp`;
+        captionText.innerHTML = newImage.prompt;
 
-</script>
-</body>
+        // Calculate the full width of an image including margins
+        const imageElement = imageContainer.children[currentIndex];
+        const style = window.getComputedStyle(imageElement);
+        const margin =
+          parseFloat(style.marginLeft) + parseFloat(style.marginRight);
+        const fullImageWidth = imageElement.offsetWidth + margin;
+
+        // Update the scroll position to the center of the selected image
+        const newScrollPosition =
+          imageElement.offsetLeft -
+          imageContainer.clientWidth / 2 +
+          fullImageWidth / 2;
+
+        imageContainer.scrollLeft = newScrollPosition;
+
+        // Update the scroll indicator
+        updateScrollIndicator();
+      }
+
+      function openModal(imgElement) {
+        const modal = document.getElementById("myModal");
+        const modalImg = document.getElementById("modalImage");
+        const captionText = document.getElementById("caption");
+        modal.style.display = "block";
+        modalImg.src = imgElement.src;
+        captionText.innerHTML = imgElement.alt;
+      }
+
+      function closeModal() {
+        const modal = document.getElementById("myModal");
+        modal.style.display = "none";
+      }
+    </script>
+  </body>
 </html>
